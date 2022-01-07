@@ -22,7 +22,32 @@ const writeFunc = () => {
       console.log(error.message || "Something went wrong");
     }
   };
-  apPost();
+  const getCurrentData = async () => {
+      let data = {}
+      try {
+          const response = await fetch("https://react-flashcards-70208-default-rtdb.firebaseio.com/flashcards.json")
+          if (!response.ok) {
+              throw new Error('Fuck')
+          }
+          data = response.json()
+      } catch (error) {
+          console.log(error.message || 'Something went wrong')
+      }
+      return data
+  }
+  const currData = getCurrentData()
+  let numTimes = 0
+  for (const key in currData) {
+      if (eng.toLowerCase() === currData[key].english.toLowerCase()) {
+          numTimes += 1
+      }
+  }
+  if (numTimes === 0) {
+      apPost();
+  }
+  else {
+      console.log('Element already exists')
+  }
 };
 
 document.getElementById("sub").addEventListener("click", writeFunc);
